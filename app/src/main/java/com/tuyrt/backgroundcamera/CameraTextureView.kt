@@ -65,7 +65,7 @@ class CameraTextureView @JvmOverloads constructor(
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
         ThreadHelper.getInstance().runOnHandlerThread {
             openCamera()
-            startPreview(surface)
+            startPreviewAndTakePhoto(surface)
         }
     }
 
@@ -121,7 +121,7 @@ class CameraTextureView @JvmOverloads constructor(
      *
      * @param texture
      */
-    private fun startPreview(texture: SurfaceTexture) {
+    private fun startPreviewAndTakePhoto(texture: SurfaceTexture) {
         mCamera?.let { camera ->
             try {
                 camera.setPreviewTexture(texture)
@@ -138,7 +138,9 @@ class CameraTextureView @JvmOverloads constructor(
     }
 
     private fun takePhoto(camera: Camera) {
-        /*val parameters = camera.parameters
+        /*
+        //有的 Camera 不支持自动对焦
+        val parameters = camera.parameters
         parameters.pictureFormat = ImageFormat.JPEG
         parameters.setPreviewSize(640, 480);
         parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
